@@ -12,6 +12,12 @@ I recommend you to follow the users, they have good projects in their accounts:
 * [ReiDoBregaBR](https://github.com/ReiDoBrega) Design the script with a new layout 
 * [Puyodead1](https://github.com/Puyodead1) Original base script
 
+## Which cdm works?
+ChromeCDM: 2160p - 1080p - 720p - SD + Audio
+L1:  2160p - 1080p - 720p - SD + Audio
+L3: 720p - SD + Audio
+(Some cdm l3 work for all resolutions)
+
 ## If you're wondering why I just posted it publicly, it's because this was leaked to a lot of people when it was posted in the discord group anyway
 (Anyway this was an open project kek)
 
