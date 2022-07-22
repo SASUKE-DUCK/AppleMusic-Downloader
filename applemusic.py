@@ -570,8 +570,6 @@ class AppleMusicClient:
                     metadata, output_name = self.fetch_music_metadata(track["id"])
                     output_name = normalize(output_name)
                     self.contents_to_be_ripped.append((metadata, output_name))
-                # Skip music videos contained in the tracklisting
-                if track['attributes']['playParams']['kind'] == 'musicVideo': continue
                 
         # music video
         elif self.content_type == 'music-video':
