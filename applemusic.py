@@ -202,7 +202,9 @@ class AppleMusicClient:
         self.session.verify = False
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         self.session.headers.update({
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0"})
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0",
+            "Origin": "https://music.apple.com"
+        })
         self.session.cookies.update(self.cookies_())
 
         token_file = os.path.join(toolcfg.folder.cookies, 'token.txt')
@@ -377,7 +379,8 @@ class AppleMusicClient:
                 aria2c_input += f'{track.url}\n'
                 aria2c_input += f'\tdir={dname}\n'
                 aria2c_input += f'\tout={fname}\n'
-
+                # Create temp folder if it doesn't already exist
+                if not os.path.exists(toolcfg.folder.temp): os.mkdir(toolcfg.folder.temp) 
                 aria2c_infile = os.path.join(toolcfg.folder.temp, 'aria2c_infile.txt')
                 track_fname = os.path.join(track_fname)
                 with open(aria2c_infile, 'w') as fd:
@@ -563,9 +566,11 @@ class AppleMusicClient:
                 tracks_list.append(tracks_single)
 
             for track in tracks_list:
-                metadata, output_name = self.fetch_music_metadata(track["id"])
-                output_name = normalize(output_name)
-                self.contents_to_be_ripped.append((metadata, output_name))
+                if track['attributes']['playParams']['kind'] == 'song':
+                    metadata, output_name = self.fetch_music_metadata(track["id"])
+                    output_name = normalize(output_name)
+                    self.contents_to_be_ripped.append((metadata, output_name))
+                
         # music video
         elif self.content_type == 'music-video':
             video_info = self.fetch_info("music-videos", tid=self.url_main_id)
@@ -621,6 +626,7 @@ class AppleMusicClient:
             return
         else:
             self.log.info("+ All Decrypting Complete")
+            if not os.path.exists(toolcfg.folder.output): os.mkdir(toolcfg.folder.output)
             if self.content_type != 'music-video':
                 self.album_folder = os.path.join(toolcfg.folder.output, self.album_name)
                 if not os.path.exists(self.album_folder):
